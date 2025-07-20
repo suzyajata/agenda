@@ -307,7 +307,7 @@ export default {
 
 /* Header */
 .header-section {
-    background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+    background: #B23564;
     color: white;
     padding: 30px;
     border-radius: 12px;
@@ -325,7 +325,7 @@ export default {
 
 .btn-add-contact {
     background: white;
-    color: #4a90e2;
+    color: #912a4f;
     border: none;
     padding: 12px 24px;
     border-radius: 25px;
@@ -390,12 +390,12 @@ export default {
 
 .filter-input:focus, .filter-select:focus {
     outline: none;
-    border-color: #4a90e2;
-    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+    border-color: #ba1344;
+  box-shadow: 0 0 0 3px rgba(186, 19, 68, 0.2);
 }
 
 .btn-clear-filters {
-    background: #dc3545;
+    background: #f5d033;
     color: white;
     border: none;
     padding: 12px 20px;
@@ -418,8 +418,8 @@ export default {
 }
 
 .counter-badge {
-    background: #4a90e2;
-    color: white;
+    background: #f6f6f6;
+    color: #dc143c;
     padding: 8px 20px;
     border-radius: 20px;
     font-size: 0.9rem;
@@ -442,7 +442,7 @@ export default {
 }
 
 .table-header {
-    background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+    background:#B23564;
 }
 
 .table-header th {
@@ -475,7 +475,7 @@ export default {
 }
 
 .id-cell {
-    background: #e3f2fd;
+    background: #ffdee0;
     color: #1976d2;
     font-weight: bold;
     width: 60px;
@@ -487,12 +487,12 @@ export default {
 }
 
 .email-cell {
-    color: #4a90e2;
+    color: #c41e3a;
     font-style: italic;
 }
 
 .country-badge {
-    background: #4a90e2;
+    background: #fd9ba4;
     color: white;
     padding: 4px 12px;
     border-radius: 15px;
@@ -550,7 +550,7 @@ export default {
     border: 2px solid #e9ecef;
     border-radius: 12px;
     padding: 30px;
-    color: #6c757d;
+    color: #912a4f;
 }
 
 .no-results-card h5 {
@@ -583,7 +583,7 @@ export default {
 }
 
 .modal-header {
-    background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+    background: #912a4f;
     color: white;
     padding: 20px;
     border-radius: 12px 12px 0 0;

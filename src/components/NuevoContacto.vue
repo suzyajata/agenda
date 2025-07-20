@@ -177,13 +177,13 @@ export default {
 }
 
 .form-control:focus, .form-select:focus {
-    border-color: #86b7fe;
+    border-color: #da4e68;
     outline: 0;
     box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
 
 .form-control.is-invalid, .form-select.is-invalid {
-    border-color: #dc3545;
+    border-color: #da4e68;
 }
 
 .invalid-feedback {
@@ -210,14 +210,14 @@ export default {
 }
 
 .btn-primary {
-    background-color: #0d6efd;
-    border-color: #0d6efd;
+    background-color: #cd717f;
+    border-color: #cd717f;
     color: white;
 }
 
 .btn-primary:hover {
-    background-color: #0b5ed7;
-    border-color: #0a58ca;
+    background-color: #7ac0c9;
+    border-color: #7ac0c9;
 }
 
 .btn-secondary {

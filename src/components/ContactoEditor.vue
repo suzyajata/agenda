@@ -169,12 +169,12 @@ export default {
 }
 
 .btn-success {
-    background: #28a745;
+    background: #cd717f;
     color: white;
 }
 
 .btn-success:hover {
-    background: #218838;
+    background: #7ac0c9;
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
 }
@@ -189,7 +189,9 @@ export default {
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
 }
-
+.editor-container {
+    overflow: hidden;
+}
 @media (max-width: 480px) {
     .editor-container {
         padding: 20px;

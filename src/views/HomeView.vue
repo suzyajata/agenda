@@ -1,14 +1,14 @@
 <template>
   <div class="home">
     <div class="container mt-5">
-      <h1 class="mb-4">Gestión de Contactos</h1>
+      <h1 class="mb-4">AGENDA</h1>
       <div class="row">
         <div class="col-md-8 mx-auto">
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">Sistema de Gestión de Contactos con Vue 3</h5>
+              <h5 class="card-title">AGENDA DE CONTACTOS</h5>
               <p class="card-text">
-                Esta aplicación permite gestionar contactos de manera completa con las siguientes funcionalidades:
+                Se permite gestionar contactos de manera completa con las siguientes funcionalidades:
               </p>
               <ul class="list-group list-group-flush mb-3">
                 <li class="list-group-item">✅ Listar contactos</li>
