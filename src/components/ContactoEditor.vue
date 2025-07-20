@@ -1,29 +1,27 @@
 <template>
-    <div class="container mt-4">
-        <h4>Editar Contacto</h4>
-
+    <div class="editor-container">
         <form @submit.prevent="emitirDatosEditados" novalidate>
-            <div class="mb-3">
+            <div class="form-group">
                 <label class="form-label">Nombre *</label>
-                <input v-model="editado.name" type="text" class="form-control" required />
+                <input v-model="editado.name" type="text" class="form-input" required />
             </div>
 
-            <div class="mb-3">
+            <div class="form-group">
                 <label class="form-label">Email *</label>
-                <input v-model="editado.email" type="email" class="form-control" required />
+                <input v-model="editado.email" type="email" class="form-input" required />
             </div>
 
-            <div class="mb-3">
+            <div class="form-group">
                 <label class="form-label">Dirección</label>
-                <input v-model="editado.address" type="text" class="form-control" />
+                <input v-model="editado.address" type="text" class="form-input" />
             </div>
 
-            <div class="mb-3">
+            <div class="form-group">
                 <label class="form-label">Teléfono</label>
-                <input v-model="editado.phone" type="tel" class="form-control" />
+                <input v-model="editado.phone" type="tel" class="form-input" />
             </div>
 
-            <div class="mb-3">
+            <div class="form-group">
                 <label class="form-label">País</label>
                 <select v-model="editado.country" class="form-select">
                     <option value="">Seleccione un país</option>
@@ -44,12 +42,12 @@
                 </select>
             </div>
 
-            <div class="mb-3">
+            <div class="form-group">
                 <label class="form-label">Ciudad</label>
-                <input v-model="editado.city" type="text" class="form-control" />
+                <input v-model="editado.city" type="text" class="form-input" />
             </div>
 
-            <div class="d-flex gap-2">
+            <div class="form-buttons">
                 <button type="submit" class="btn btn-success">Guardar Cambios</button>
                 <button type="button" class="btn btn-secondary" @click="cancelar">Cancelar</button>
             </div>
@@ -68,12 +66,10 @@ export default {
     },
     data() {
         return {
-            // Copia del objeto original para evitar modificarlo directamente
             editado: { ...this.contacto }
         }
     },
     watch: {
-        // Observar cambios en la prop contacto para actualizar editado
         contacto: {
             handler(newVal) {
                 if (newVal) {
@@ -86,7 +82,6 @@ export default {
     },
     methods: {
         emitirDatosEditados() {
-            // Validaciones básicas
             if (!this.editado.name || this.editado.name.trim() === '') {
                 alert('El nombre es obligatorio');
                 return;
@@ -97,14 +92,12 @@ export default {
                 return;
             }
             
-            // Validar formato de email básico
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(this.editado.email)) {
                 alert('Por favor ingrese un email válido');
                 return;
             }
 
-            // Emitimos un evento con los datos modificados
             this.$emit('update', this.editado);
         },
         
@@ -116,79 +109,98 @@ export default {
 </script>
 
 <style scoped>
-.container {
-    max-width: 600px;
+.editor-container {
+    padding: 25px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.form-group {
+    margin-bottom: 20px;
 }
 
 .form-label {
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-}
-
-.form-control, .form-select {
     display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+    font-size: 0.95rem;
+}
+
+.form-input, .form-select {
     width: 100%;
-    padding: 0.375rem 0.75rem;
+    padding: 12px 15px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
     font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    color: #212529;
-    background-color: #fff;
-    background-image: none;
-    border: 1px solid #ced4da;
-    border-radius: 0.25rem;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    font-family: inherit;
+    background: white;
+    transition: all 0.3s ease;
 }
 
-.form-control:focus, .form-select:focus {
-    border-color: #86b7fe;
-    outline: 0;
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+.form-input:focus, .form-select:focus {
+    outline: none;
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
 }
 
-.mb-3 {
-    margin-bottom: 1rem;
+.form-select {
+    cursor: pointer;
+}
+
+.form-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #e9ecef;
 }
 
 .btn {
-    padding: 0.375rem 0.75rem;
-    margin: 0.125rem;
-    border: 1px solid transparent;
-    border-radius: 0.25rem;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
     font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
     text-decoration: none;
     display: inline-block;
-    cursor: pointer;
-    transition: all 0.15s ease-in-out;
 }
 
 .btn-success {
-    background-color: #198754;
-    border-color: #198754;
+    background: #28a745;
     color: white;
 }
 
 .btn-success:hover {
-    background-color: #157347;
-    border-color: #146c43;
+    background: #218838;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
 }
 
 .btn-secondary {
-    background-color: #6c757d;
-    border-color: #6c757d;
+    background: #6c757d;
     color: white;
 }
 
 .btn-secondary:hover {
-    background-color: #5c636a;
-    border-color: #565e64;
+    background: #5a6268;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
 }
 
-.d-flex {
-    display: flex;
-}
-
-.gap-2 {
-    gap: 0.5rem;
+@media (max-width: 480px) {
+    .editor-container {
+        padding: 20px;
+    }
+    
+    .form-buttons {
+        flex-direction: column;
+    }
+    
+    .btn {
+        width: 100%;
+    }
 }
 </style>

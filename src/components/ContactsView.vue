@@ -1,53 +1,44 @@
 <template>
     <div class="contacts-container">
-        <div class="container mt-4">
+        <div class="container">
+            <!-- Header con título y botón -->
             <div class="header-section">
-                <h1 class="main-title">{{ title }}</h1>
-                <p>
-                    <button type="button" class="btn btn-add-contact" @click="goToNew()">
-                        ➕ Nuevo Contacto
-                    </button>
-                </p>
+                <h1 class="main-title">📞 Gestión de Contactos</h1>
+                <button type="button" class="btn-add-contact" @click="goToNew()">
+                    + Nuevo Contacto
+                </button>
             </div>
             
-            <!-- Filtros -->
+            <!-- Sección de filtros -->
             <div class="filters-section">
-                <div class="row mb-3">
-                    <div class="col-md-4">
-                        <div class="filter-group">
-                            <span class="filter-icon">🔍</span>
-                            <input type="search" v-model="nombreABuscar" class="form-control custom-input" 
-                                   placeholder="Buscar por nombre...">
-                        </div>
+                <div class="filters-row">
+                    <div class="filter-group">
+                        <span class="filter-icon">🔍</span>
+                        <input type="search" v-model="nombreABuscar" class="filter-input" 
+                               placeholder="Buscar por nombre...">
                     </div>
-                    <div class="col-md-4">
-                        <div class="filter-group">
-                            <span class="filter-icon">📧</span>
-                            <input type="search" v-model="emailABuscar" class="form-control custom-input" 
-                                   placeholder="Buscar por email...">
-                        </div>
+                    <div class="filter-group">
+                        <span class="filter-icon">📧</span>
+                        <input type="search" v-model="emailABuscar" class="filter-input" 
+                               placeholder="Buscar por email...">
                     </div>
-                    <div class="col-md-4">
-                        <div class="filter-group">
-                            <span class="filter-icon">🌍</span>
-                            <select v-model="paisSeleccionado" class="form-select custom-select">
-                                <option value="">Todos los países</option>
-                                <option v-for="pais in paisesUnicos" :key="pais" :value="pais">{{ pais }}</option>
-                            </select>
-                        </div>
+                    <div class="filter-group">
+                        <span class="filter-icon">🌍</span>
+                        <select v-model="paisSeleccionado" class="filter-select">
+                            <option value="">Todos los países</option>
+                            <option v-for="pais in paisesUnicos" :key="pais" :value="pais">{{ pais }}</option>
+                        </select>
                     </div>
                 </div>
                 
-                <div class="row mb-3">
-                    <div class="col-md-4">
-                        <div class="filter-group">
-                            <span class="filter-icon">🏙️</span>
-                            <input type="search" v-model="ciudadABuscar" class="form-control custom-input" 
-                                   placeholder="Buscar por ciudad...">
-                        </div>
+                <div class="filters-row-2">
+                    <div class="filter-group">
+                        <span class="filter-icon">🏙️</span>
+                        <input type="search" v-model="ciudadABuscar" class="filter-input" 
+                               placeholder="Buscar por ciudad...">
                     </div>
-                    <div class="col-md-8 d-flex align-items-end">
-                        <button type="button" class="btn btn-clear-filters" @click="limpiarFiltros">
+                    <div class="clear-filters-container">
+                        <button type="button" class="btn-clear-filters" @click="limpiarFiltros">
                             🗑️ Limpiar Filtros
                         </button>
                     </div>
@@ -55,7 +46,7 @@
             </div>
 
             <!-- Contador de resultados -->
-            <div class="results-counter mb-3">
+            <div class="results-counter">
                 <span class="counter-badge">
                     Mostrando {{ getContactos.length }} de {{ contactos.length }} contactos
                 </span>
@@ -63,80 +54,70 @@
 
             <!-- Tabla de contactos -->
             <div class="table-container">
-                <div class="table-responsive">
-                    <table class="table custom-table">
-                        <thead class="table-header">
-                            <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">Nombre</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Teléfono</th>
-                                <th scope="col">País</th>
-                                <th scope="col">Ciudad</th>
-                                <th scope="col">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="(contacto, index) in getContactos" :key="contacto.id" class="table-row">
-                                <th scope="row" class="id-column">{{ contacto.id }}</th>
-                                <td class="name-column">{{ contacto.name }}</td>
-                                <td class="email-column">{{ contacto.email }}</td>
-                                <td>{{ contacto.phone || '-' }}</td>
-                                <td>
-                                    <span v-if="contacto.country" class="country-badge">{{ contacto.country }}</span>
-                                    <span v-else>-</span>
-                                </td>
-                                <td>{{ contacto.city || '-' }}</td>
-                                <td>
-                                    <div class="action-buttons" role="group">
-                                        <button type="button" class="btn btn-edit" 
-                                                @click="abrirModal(index)" title="Editar">
-                                            ✏️
-                                        </button>
-                                        <button type="button" class="btn btn-delete" 
-                                                @click="eliminar(index)" title="Eliminar">
-                                            🗑️
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    
-                    <div v-if="getContactos.length === 0" class="no-results">
-                        <div class="alert-custom">
-                            <h5>📋 No se encontraron contactos</h5>
-                            <p class="mb-0">
-                                {{ contactos.length === 0 ? 'No hay contactos registrados.' : 'No hay contactos que coincidan con los filtros aplicados.' }}
-                            </p>
-                        </div>
+                <table class="contacts-table">
+                    <thead class="table-header">
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Email</th>
+                            <th>Teléfono</th>
+                            <th>País</th>
+                            <th>Ciudad</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(contacto, index) in getContactos" :key="contacto.id" class="table-row">
+                            <td class="id-cell">{{ contacto.id }}</td>
+                            <td class="name-cell">{{ contacto.name }}</td>
+                            <td class="email-cell">{{ contacto.email }}</td>
+                            <td>{{ contacto.phone || '-' }}</td>
+                            <td>
+                                <span v-if="contacto.country" class="country-badge">{{ contacto.country }}</span>
+                                <span v-else>-</span>
+                            </td>
+                            <td>{{ contacto.city || '-' }}</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button type="button" class="btn-edit" 
+                                            @click="abrirModal(index)" title="Editar">
+                                        ✏️
+                                    </button>
+                                    <button type="button" class="btn-delete" 
+                                            @click="eliminar(index)" title="Eliminar">
+                                        🗑️
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div v-if="getContactos.length === 0" class="no-results">
+                    <div class="no-results-card">
+                        <h5>📋 No se encontraron contactos</h5>
+                        <p>{{ contactos.length === 0 ? 'No hay contactos registrados.' : 'No hay contactos que coincidan con los filtros aplicados.' }}</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Modal Bootstrap -->
-        <div class="modal fade" id="modalContactoEditar" tabindex="-1" 
-             aria-labelledby="modalContactoEditarLabel" aria-hidden="true" ref="modalRef">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content custom-modal">
-                    <div class="modal-header custom-modal-header">
-                        <h5 class="modal-title" id="modalContactoEditarLabel">
-                            {{ modalMode === 'editar' ? '✏️ Editar Contacto' : '➕ Nuevo Contacto' }}
-                        </h5>
-                        <button type="button" class="btn-close custom-close" data-bs-dismiss="modal" 
-                                aria-label="Cerrar"></button>
-                    </div>
-                    <div class="modal-body">
-                        <!-- Componente ContactoEditor -->
-                        <ContactoEditor v-if="modalMode === 'editar' && contactoSeleccionado" 
-                                        :contacto="contactoSeleccionado" 
-                                        @update="guardarEdicion"
-                                        @cancelar="cerrarModal" />
-                        <!-- Componente NuevoContacto -->
-                        <NuevoContacto v-if="modalMode === 'crear'" 
-                                       @created="agregarNuevo($event)" />
-                    </div>
+        <!-- Modal -->
+        <div v-if="showModal" class="modal-overlay" @click="cerrarModal">
+            <div class="modal-content" @click.stop>
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        {{ modalMode === 'editar' ? '✏️ Editar Contacto' : '➕ Nuevo Contacto' }}
+                    </h5>
+                    <button type="button" class="modal-close" @click="cerrarModal">×</button>
+                </div>
+                <div class="modal-body">
+                    <ContactoEditor v-if="modalMode === 'editar' && contactoSeleccionado" 
+                                    :contacto="contactoSeleccionado" 
+                                    @update="guardarEdicion"
+                                    @cancelar="cerrarModal" />
+                    <NuevoContacto v-if="modalMode === 'crear'" 
+                                   @created="agregarNuevo($event)" />
                 </div>
             </div>
         </div>
@@ -144,14 +125,13 @@
 </template>
 
 <script>
-import ContactoEditor from '../components/ContactoEditor.vue';
-import NuevoContacto from '../components/NuevoContacto.vue';
+import ContactoEditor from './ContactoEditor.vue';
+import NuevoContacto from './NuevoContacto.vue';
 
 export default {
     name: 'ContactsView',
     data() {
         return {
-            title: '📞 Gestión de Contactos',
             contactos: [
                 {
                     id: 1,
@@ -199,55 +179,34 @@ export default {
                     city: "Los Angeles"
                 }
             ],
-            modalBootstrapInstance: null,
             contactoSeleccionado: null,
             indiceSeleccionado: 0,
             nombreABuscar: "",
             emailABuscar: "",
             paisSeleccionado: "",
             ciudadABuscar: "",
-            modalMode: "crear"
+            modalMode: "crear",
+            showModal: false
         }
     },
     components: {
         ContactoEditor,
         NuevoContacto,
     },
-    mounted() {
-        this.$nextTick(() => {
-            if (this.$refs.modalRef) {
-                this.modalBootstrapInstance = new bootstrap.Modal(this.$refs.modalRef);
-            } else {
-                console.error('No se encontró el ref modalRef');
-            }
-        });
-    },
     methods: {
         goToNew() {
             this.modalMode = "crear";
-            if (this.modalBootstrapInstance) {
-                this.modalBootstrapInstance.show();
-            } else {
-                console.error('modalBootstrapInstance no está inicializado');
-            }
+            this.showModal = true;
         },
         abrirModal(index) {
-            this.contactoSeleccionado = null;
             this.indiceSeleccionado = index;
             this.modalMode = "editar";
-            setTimeout(() => {
-                if (this.modalBootstrapInstance) {
-                    this.modalBootstrapInstance.show();
-                    this.contactoSeleccionado = { ...this.getContactos[index] };
-                } else {
-                    console.error('modalBootstrapInstance no está inicializado');
-                }
-            });
+            this.contactoSeleccionado = { ...this.getContactos[index] };
+            this.showModal = true;
         },
         cerrarModal() {
-            if (this.modalBootstrapInstance) {
-                this.modalBootstrapInstance.hide();
-            }
+            this.showModal = false;
+            this.contactoSeleccionado = null;
         },
         guardarEdicion(contactoEditado) {
             console.log('Contacto editado:', contactoEditado);
@@ -295,37 +254,30 @@ export default {
         getContactos() {
             let result = [...this.contactos];
             
-            // Filtrar por nombre
             if (this.nombreABuscar !== "") {
                 result = result.filter((contacto) => {
                     const nombre = contacto.name || "";
-                    const textoBusqueda = this.nombreABuscar || "";
-                    return nombre.toLowerCase().includes(textoBusqueda.toLowerCase());
+                    return nombre.toLowerCase().includes(this.nombreABuscar.toLowerCase());
                 });
             }
             
-            // Filtrar por email
             if (this.emailABuscar !== "") {
                 result = result.filter((contacto) => {
                     const email = contacto.email || "";
-                    const textoBusqueda = this.emailABuscar || "";
-                    return email.toLowerCase().includes(textoBusqueda.toLowerCase());
+                    return email.toLowerCase().includes(this.emailABuscar.toLowerCase());
                 });
             }
 
-            // Filtrar por país
             if (this.paisSeleccionado !== "") {
                 result = result.filter((contacto) => {
                     return contacto.country === this.paisSeleccionado;
                 });
             }
 
-            // Filtrar por ciudad
             if (this.ciudadABuscar !== "") {
                 result = result.filter((contacto) => {
                     const ciudad = contacto.city || "";
-                    const textoBusqueda = this.ciudadABuscar || "";
-                    return ciudad.toLowerCase().includes(textoBusqueda.toLowerCase());
+                    return ciudad.toLowerCase().includes(this.ciudadABuscar.toLowerCase());
                 });
             }
             
@@ -336,246 +288,338 @@ export default {
 </script>
 
 <style scoped>
-/* Colores inspirados en la agenda azul */
-:root {
-    --primary-blue: #2c5aa0;
-    --secondary-blue: #4472c4;
-    --light-blue: #dce6f2;
-    --accent-blue: #1f4788;
-    --text-blue: #1a365d;
-    --border-blue: #b3c6e7;
-    --hover-blue: #f0f4ff;
+* {
+    box-sizing: border-box;
 }
 
+/* Contenedor principal */
 .contacts-container {
-    background: linear-gradient(135deg, #f8faff 0%, #e8f2ff 100%);
+    background: #f8f9fa;
     min-height: 100vh;
-    padding-bottom: 2rem;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header */
 .header-section {
-    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+    background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
     color: white;
-    padding: 2rem;
-    border-radius: 15px;
-    margin-bottom: 2rem;
-    box-shadow: 0 8px 25px rgba(44, 90, 160, 0.3);
+    padding: 30px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+    text-align: center;
 }
 
 .main-title {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
     font-weight: 700;
-    margin-bottom: 1rem;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    margin: 0 0 20px 0;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
 .btn-add-contact {
-    background: linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%);
-    color: var(--primary-blue);
-    border: 2px solid rgba(255,255,255,0.3);
+    background: white;
+    color: #4a90e2;
+    border: none;
     padding: 12px 24px;
     border-radius: 25px;
     font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(255,255,255,0.2);
+    box-shadow: 0 2px 10px rgba(255,255,255,0.2);
 }
 
 .btn-add-contact:hover {
-    background: white;
+    background: #f0f8ff;
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(255,255,255,0.3);
+    box-shadow: 0 4px 15px rgba(255,255,255,0.3);
 }
 
+/* Filtros */
 .filters-section {
     background: white;
-    padding: 1.5rem;
-    border-radius: 15px;
-    box-shadow: 0 4px 20px rgba(44, 90, 160, 0.1);
-    margin-bottom: 1.5rem;
-    border: 1px solid var(--light-blue);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.filters-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.filters-row-2 {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 20px;
+    align-items: end;
 }
 
 .filter-group {
     position: relative;
-    display: flex;
-    align-items: center;
 }
 
 .filter-icon {
     position: absolute;
-    left: 12px;
-    z-index: 3;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
     font-size: 1.1rem;
 }
 
-.custom-input, .custom-select {
-    padding-left: 45px !important;
-    border: 2px solid var(--border-blue);
-    border-radius: 10px;
-    transition: all 0.3s ease;
+.filter-input, .filter-select {
+    width: 100%;
+    padding: 12px 15px 12px 45px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 1rem;
     background: white;
+    transition: all 0.3s ease;
 }
 
-.custom-input:focus, .custom-select:focus {
-    border-color: var(--secondary-blue);
-    box-shadow: 0 0 0 3px rgba(68, 114, 196, 0.1);
-    background: var(--hover-blue);
+.filter-input:focus, .filter-select:focus {
+    outline: none;
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
 }
 
 .btn-clear-filters {
-    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+    background: #dc3545;
     color: white;
     border: none;
-    padding: 8px 16px;
+    padding: 12px 20px;
     border-radius: 8px;
     font-weight: 500;
+    cursor: pointer;
     transition: all 0.3s ease;
+    white-space: nowrap;
 }
 
 .btn-clear-filters:hover {
+    background: #c82333;
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
 }
 
+/* Contador */
 .results-counter {
     text-align: center;
+    margin-bottom: 20px;
 }
 
 .counter-badge {
-    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+    background: #4a90e2;
     color: white;
     padding: 8px 20px;
-    border-radius: 25px;
+    border-radius: 20px;
     font-size: 0.9rem;
     font-weight: 500;
-    box-shadow: 0 3px 10px rgba(44, 90, 160, 0.3);
+    display: inline-block;
 }
 
+/* Tabla */
 .table-container {
     background: white;
-    border-radius: 15px;
+    border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 8px 25px rgba(44, 90, 160, 0.15);
-    border: 1px solid var(--light-blue);
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
 }
 
-.custom-table {
-    margin-bottom: 0;
-    border: none;
+.contacts-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
 }
 
 .table-header {
-    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
-    color: white;
+    background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
 }
 
 .table-header th {
-    border: none;
-    padding: 1rem 0.75rem;
+    color: white;
+    padding: 15px 10px;
     font-weight: 600;
     text-align: center;
-    position: relative;
+    border: none;
+    font-size: 0.95rem;
 }
 
 .table-row {
     transition: all 0.3s ease;
-    border-bottom: 1px solid var(--light-blue);
+    border-bottom: 1px solid #e9ecef;
 }
 
 .table-row:hover {
-    background: var(--hover-blue);
-    transform: scale(1.01);
-    box-shadow: 0 4px 15px rgba(44, 90, 160, 0.1);
+    background: #f8f9fa;
 }
 
-.id-column {
-    background: linear-gradient(135deg, var(--light-blue) 0%, #ffffff 100%);
-    color: var(--text-blue);
-    font-weight: 700;
+.table-row:last-child {
+    border-bottom: none;
+}
+
+.contacts-table td {
+    padding: 15px 10px;
     text-align: center;
+    vertical-align: middle;
+    font-size: 0.9rem;
 }
 
-.name-column {
+.id-cell {
+    background: #e3f2fd;
+    color: #1976d2;
+    font-weight: bold;
+    width: 60px;
+}
+
+.name-cell {
     font-weight: 600;
-    color: var(--text-blue);
+    color: #333;
 }
 
-.email-column {
-    color: var(--secondary-blue);
+.email-cell {
+    color: #4a90e2;
     font-style: italic;
 }
 
 .country-badge {
-    background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-blue) 100%);
+    background: #4a90e2;
     color: white;
     padding: 4px 12px;
     border-radius: 15px;
     font-size: 0.8rem;
     font-weight: 500;
+    display: inline-block;
 }
 
 .action-buttons {
     display: flex;
-    gap: 0.5rem;
+    gap: 8px;
     justify-content: center;
 }
 
 .btn-edit {
-    background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+    background: #17a2b8;
     color: white;
     border: none;
-    padding: 6px 12px;
-    border-radius: 8px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
     transition: all 0.3s ease;
+    font-size: 0.9rem;
 }
 
 .btn-edit:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(23, 162, 184, 0.3);
+    background: #138496;
+    transform: translateY(-1px);
 }
 
 .btn-delete {
-    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    background: #dc3545;
     color: white;
     border: none;
-    padding: 6px 12px;
-    border-radius: 8px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
     transition: all 0.3s ease;
+    font-size: 0.9rem;
 }
 
 .btn-delete:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+    background: #c82333;
+    transform: translateY(-1px);
 }
 
+/* Sin resultados */
 .no-results {
-    padding: 3rem;
+    padding: 40px;
     text-align: center;
 }
 
-.alert-custom {
-    background: linear-gradient(135deg, var(--light-blue) 0%, #ffffff 100%);
-    border: 2px solid var(--border-blue);
-    border-radius: 15px;
-    padding: 2rem;
-    color: var(--text-blue);
+.no-results-card {
+    background: #f8f9fa;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    padding: 30px;
+    color: #6c757d;
 }
 
-.custom-modal .modal-content {
-    border: none;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(44, 90, 160, 0.3);
+.no-results-card h5 {
+    margin-bottom: 10px;
+    color: #495057;
 }
 
-.custom-modal-header {
-    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+/* Modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
     color: white;
-    border-radius: 15px 15px 0 0;
-    border-bottom: none;
+    padding: 20px;
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.custom-close {
-    filter: invert(1);
+.modal-title {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background 0.3s ease;
+}
+
+.modal-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.modal-body {
+    padding: 0;
 }
 
 /* Responsive */
@@ -584,16 +628,55 @@ export default {
         font-size: 1.8rem;
     }
     
-    .header-section {
-        padding: 1.5rem;
+    .filters-row {
+        grid-template-columns: 1fr;
+        gap: 15px;
     }
     
-    .filters-section {
-        padding: 1rem;
+    .filters-row-2 {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .contacts-table {
+        font-size: 0.8rem;
+    }
+    
+    .contacts-table td,
+    .table-header th {
+        padding: 10px 5px;
     }
     
     .action-buttons {
         flex-direction: column;
+        gap: 5px;
+    }
+    
+    .modal-content {
+        width: 95%;
+        margin: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 15px;
+    }
+    
+    .header-section {
+        padding: 20px;
+    }
+    
+    .filters-section {
+        padding: 20px;
+    }
+    
+    /* Ocultar algunas columnas en móvil */
+    .contacts-table th:nth-child(4),
+    .contacts-table td:nth-child(4),
+    .contacts-table th:nth-child(6),
+    .contacts-table td:nth-child(6) {
+        display: none;
     }
 }
 </style>
