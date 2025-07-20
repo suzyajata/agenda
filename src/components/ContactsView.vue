@@ -1,33 +1,41 @@
 <template>
-    <div class="container">
+    <div class="container mt-4">
         <h1>{{ title }}</h1>
         <p>
             <button type="button" class="btn btn-primary" @click="goToNew()">
-                Nuevo Contacto
+                ➕ Nuevo Contacto
             </button>
         </p>
         
         <!-- Filtros -->
-        <div class="mb-3">
-            <div class="input-group">
-                <span class="input-group-text">Buscar por nombre</span>
-                <input type="search" v-model="nombreABuscar" class="form-control" 
-                       placeholder="Escriba el nombre a buscar...">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <span class="input-group-text">🔍 Nombre</span>
+                    <input type="search" v-model="nombreABuscar" class="form-control" 
+                           placeholder="Buscar por nombre...">
+                </div>
             </div>
-        </div>
-        
-        <div class="mb-3">
-            <div class="input-group">
-                <span class="input-group-text">Buscar por email</span>
-                <input type="search" v-model="emailABuscar" class="form-control" 
-                       placeholder="Escriba el email a buscar...">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <span class="input-group-text">📧 Email</span>
+                    <input type="search" v-model="emailABuscar" class="form-control" 
+                           placeholder="Buscar por email...">
+                </div>
             </div>
         </div>
 
+        <!-- Contador de resultados -->
+        <div class="mb-2">
+            <small class="text-muted">
+                Mostrando {{ getContactos.length }} de {{ contactos.length }} contactos
+            </small>
+        </div>
+
         <!-- Tabla de contactos -->
-        <div>
-            <table class="table table-bordered border-primary">
-                <thead>
+        <div class="table-responsive">
+            <table class="table table-bordered border-primary table-striped">
+                <thead class="table-dark">
                     <tr>
                         <th scope="col">ID</th>
                         <th scope="col">Nombre</th>
@@ -43,25 +51,32 @@
                         <th scope="row">{{ contacto.id }}</th>
                         <td>{{ contacto.name }}</td>
                         <td>{{ contacto.email }}</td>
-                        <td>{{ contacto.phone }}</td>
-                        <td>{{ contacto.country }}</td>
-                        <td>{{ contacto.city }}</td>
+                        <td>{{ contacto.phone || '-' }}</td>
+                        <td>{{ contacto.country || '-' }}</td>
+                        <td>{{ contacto.city || '-' }}</td>
                         <td>
-                            <button type="button" class="btn btn-sm btn-primary me-2" 
-                                    @click="abrirModal(index)">
-                                Editar
-                            </button>
-                            <button type="button" class="btn btn-sm btn-danger" 
-                                    @click="eliminar(index)">
-                                Eliminar
-                            </button>
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-sm btn-outline-primary" 
+                                        @click="abrirModal(index)" title="Editar">
+                                    ✏️
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-danger" 
+                                        @click="eliminar(index)" title="Eliminar">
+                                    🗑️
+                                </button>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
             </table>
             
-            <div v-if="getContactos.length === 0" class="text-center text-muted">
-                <p>No se encontraron contactos que coincidan con los filtros.</p>
+            <div v-if="getContactos.length === 0" class="text-center text-muted p-4">
+                <div class="alert alert-info">
+                    <h5>📋 No se encontraron contactos</h5>
+                    <p class="mb-0">
+                        {{ contactos.length === 0 ? 'No hay contactos registrados.' : 'No hay contactos que coincidan con los filtros aplicados.' }}
+                    </p>
+                </div>
             </div>
         </div>
     </div>
@@ -73,7 +88,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalContactoEditarLabel">
-                        {{ modalMode === 'editar' ? 'Editar Contacto' : 'Nuevo Contacto' }}
+                        {{ modalMode === 'editar' ? '✏️ Editar Contacto' : '➕ Nuevo Contacto' }}
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" 
                             aria-label="Cerrar"></button>
@@ -101,7 +116,7 @@ export default {
     name: 'ContactsView',
     data() {
         return {
-            title: 'Gestión de Contactos',
+            title: '📞 Gestión de Contactos',
             contactos: [
                 {
                     id: 1,
@@ -203,23 +218,26 @@ export default {
             const realIndex = this.contactos.findIndex(c => c.id === contactoEditado.id);
             if (realIndex !== -1) {
                 this.contactos[realIndex] = contactoEditado;
+                alert('✅ Contacto actualizado correctamente');
             }
             this.cerrarModal();
         },
         eliminar(index) {
-            if (confirm('¿Está seguro de eliminar este contacto?')) {
-                const contactoAEliminar = this.getContactos[index];
-                const realIndex = this.contactos.findIndex(c => c.id === contactoAEliminar.id);
+            const contacto = this.getContactos[index];
+            if (confirm(`¿Está seguro de eliminar el contacto "${contacto.name}"?`)) {
+                const realIndex = this.contactos.findIndex(c => c.id === contacto.id);
                 if (realIndex !== -1) {
                     this.contactos.splice(realIndex, 1);
+                    alert('✅ Contacto eliminado correctamente');
                 }
             }
         },
         agregarNuevo(nuevoContacto) {
-            const maxId = Math.max(...this.contactos.map(contacto => contacto.id));
+            const maxId = this.contactos.length > 0 ? Math.max(...this.contactos.map(contacto => contacto.id)) : 0;
             nuevoContacto.id = maxId + 1;
             this.contactos.push(nuevoContacto);
             console.log('Nuevo contacto agregado:', nuevoContacto);
+            alert('✅ Contacto agregado correctamente');
             this.cerrarModal();
         }
     },
@@ -247,119 +265,21 @@ export default {
             
             return result;
         }
-    },
-    props: {},
-    emits: []
+    }
 }
 </script>
 
 <style scoped>
-.btn {
-    padding: 0.375rem 0.75rem;
-    margin: 0.125rem;
-    border: 1px solid transparent;
-    border-radius: 0.25rem;
-    font-size: 0.875rem;
-    text-decoration: none;
-    display: inline-block;
-    cursor: pointer;
+.btn-group .btn {
+    margin-right: 0;
 }
 
-.btn-primary {
-    background-color: #0d6efd;
-    border-color: #0d6efd;
-    color: white;
+.table-responsive {
+    border-radius: 0.375rem;
+    overflow: hidden;
 }
 
-.btn-danger {
-    background-color: #dc3545;
-    border-color: #dc3545;
-    color: white;
-}
-
-.btn-sm {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.75rem;
-}
-
-.me-2 {
-    margin-right: 0.5rem;
-}
-
-.mb-3 {
-    margin-bottom: 1rem;
-}
-
-.input-group {
-    position: relative;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: stretch;
-    width: 100%;
-}
-
-.input-group-text {
-    display: flex;
-    align-items: center;
-    padding: 0.375rem 0.75rem;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    color: #212529;
-    text-align: center;
-    white-space: nowrap;
-    background-color: #e9ecef;
-    border: 1px solid #ced4da;
-    border-radius: 0.25rem 0 0 0.25rem;
-}
-
-.form-control {
-    display: block;
-    width: 100%;
-    padding: 0.375rem 0.75rem;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    color: #212529;
-    background-color: #fff;
-    background-image: none;
-    border: 1px solid #ced4da;
-    border-radius: 0 0.25rem 0.25rem 0;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
-
-.table {
-    width: 100%;
-    margin-bottom: 1rem;
-    color: #212529;
-    border-collapse: collapse;
-}
-
-.table th,
-.table td {
-    padding: 0.5rem;
-    vertical-align: top;
-    border: 1px solid #dee2e6;
-}
-
-.table thead th {
-    background-color: #f8f9fa;
-    font-weight: 600;
-}
-
-.table-bordered {
-    border: 1px solid #dee2e6;
-}
-
-.border-primary {
-    border-color: #0d6efd !important;
-}
-
-.text-center {
-    text-align: center;
-}
-
-.text-muted {
-    color: #6c757d;
+.alert {
+    border-radius: 0.375rem;
 }
 </style>
