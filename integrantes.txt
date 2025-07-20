@@ -1,6 +1,7 @@
 Practica1 Vue3
 Nombre(s) de integrante(s):
 - SUSSY KATHERINE AJATA CACERES
+- IVO RODRIGO SANJINEZ YUJRA
 
 Pasos para iniciar el proyecto:
 1) npm install
